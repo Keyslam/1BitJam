@@ -15,6 +15,11 @@
 		"luaTarget": "JIT",
 		"noHeader": true,
 		"sourceMapTraceback": true,
-		"noResolvePaths": ["lldebugger"]
+		"noResolvePaths": ["lldebugger"],
+		"luaPlugins": [
+			{
+				"name": "./src/plugins/rewriteSpec.ts"
+			}
+		]
 	}
 }

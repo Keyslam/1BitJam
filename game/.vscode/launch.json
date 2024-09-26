@@ -11,5 +11,15 @@
 			"args": ["build", "debug"],
 			"scriptRoots": ["build"]
 		},
+		{
+			"name": "Test",
+			"type": "lua-local",
+			"request": "launch",
+			"program": {
+				"command": "lovec"
+			},
+			"args": ["build", "test"],
+			"scriptRoots": ["build"]
+		},
 	]
 }
