@@ -10,7 +10,7 @@ export function exit(): void;
 /** @noSelf **/
 export namespace expect {
 	export function tohumanstring(v: unknown): void;
-	export function fail(func: () => void, expected: unknown): void;
+	export function fail(func: () => void, expected: undefined | string | unknown): void;
 	export function not_fail(func: () => void): void;
 	export function exist(v: unknown): void;
 	export function not_exist(v: unknown): void;

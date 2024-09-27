@@ -1,10 +1,15 @@
 import { Environment } from "./environment";
 import { report } from "./libraries/lester/lester";
+import { start, useLove } from "./libraries/localLuaDebuggerPatcher/localLuaDebuggerPatcher";
 import { createOrUpdateWindowWithSettings, createSaneDefaultWindowSettings, getCurrentWindowSettings, loadWindowSettings, saveWindowSettings } from "./window";
 
 if (Environment.IS_DEBUG) {
-	// eslint-disable-next-line @typescript-eslint/no-require-imports
-	require("lldebugger").start();
+	useLove(); 
+	start();
+
+	love.errorhandler = (msg) => {
+		error(msg);
+	};
 }
 
 if (Environment.IS_TEST) {

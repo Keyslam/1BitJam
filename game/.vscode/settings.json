@@ -1,0 +1,14 @@
+{
+	"explorer.fileNesting.enabled": true,
+	"explorer.fileNesting.expand": false,
+	"explorer.fileNesting.patterns": {
+		"*.ts": "${capture}.spec.ts",
+		"*.lua": "${capture}.d.ts"
+	},
+
+	"editor.formatOnSave": true,
+	"files.autoSave": "afterDelay",
+	"files.autoSaveDelay": 500,
+
+	"typescript.preferences.importModuleSpecifier": "relative"
+}
