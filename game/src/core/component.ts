@@ -12,9 +12,15 @@ export abstract class Component {
 		return this.entity.scene;
 	}
 
+	public onFinalize(): void {}
+	public onFixedUpdate(): void {}
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public update(dt: number): void {}
-	public draw(): void {}
+	public onUpdate(dt: number): void {}
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public onRender(interpolation: number): void {}
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public onGui(interpolation: number): void {}
+	public onDestroy(): void {}
 
 	protected destroy(): void {}
 }

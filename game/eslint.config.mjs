@@ -22,6 +22,7 @@ export default [
 					message: "Use undefined instead of null",
 				},
 			],
+
 		},
 	},
 	pluginJs.configs.recommended,

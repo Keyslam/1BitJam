@@ -3,5 +3,8 @@
 	"printWidth": 1000,
 	"singleQuote": false,
 	"bracketSameLine": true,
-	"endOfLine": "auto"
+	"endOfLine": "auto",
+	"plugins": [
+		"@yikes2000/prettier-plugin-merge-extras"
+	]
 }

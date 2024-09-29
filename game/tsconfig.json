@@ -9,8 +9,11 @@
 		"outDir": "build",
 		"rootDir": "src",
 		"baseUrl": "src",
-		"sourceMap": true
+		"sourceMap": true,
 	},
+	"exclude": [
+		"src/plugins"
+	],
 	"tstl": {
 		"luaTarget": "JIT",
 		"noHeader": true,
