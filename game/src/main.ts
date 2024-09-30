@@ -1,3 +1,4 @@
+import { SceneOrchestrator } from "./core/sceneOrchestrator";
 import { Environment } from "./environment";
 import { report } from "./libraries/lester/lester";
 import { start, useLove } from "./libraries/localLuaDebuggerPatcher/localLuaDebuggerPatcher";
@@ -50,27 +51,16 @@ if (Environment.IS_TEST) {
 		saveWindowSettings(windowSettings);
 	}
 
-	const onFixedUpdate = () => {
-		print("Fixed");
-	};
-
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const onUpdate = (dt: number) => {
-		print("Update");
-	};
-
-	const onRender = () => {
-		print("Render");
-	};
+	const sceneOrchestrator = new SceneOrchestrator();
 
 	love.run = () => {
-		const TICKRATE = 1 / 60;
+		const tickRate = 1 / 60;
 
-		let lag: number = 0.0;
+		let accumulator: number = 0.0;
 
 		return () => {
 			const dt = love.timer.step();
-			lag += dt;
+			accumulator += dt;
 
 			love.event.pump();
 
@@ -83,17 +73,18 @@ if (Environment.IS_TEST) {
 				love.handlers[name](a, b, c, d, e, f);
 			}
 
-			while (lag >= TICKRATE) {
-				onFixedUpdate();
-				lag -= TICKRATE;
+			while (accumulator >= tickRate) {
+				sceneOrchestrator.onFixedUpdate();
+				accumulator -= tickRate;
 			}
 
-			onUpdate(dt);
+			sceneOrchestrator.onUpdate(dt);
 
 			if (love.graphics.isActive()) {
 				love.graphics.clear(love.graphics.getBackgroundColor());
 				love.graphics.origin();
-				onRender();
+				const interpolation = accumulator / tickRate;
+				sceneOrchestrator.onRender(interpolation);
 				love.graphics.present();
 			}
 
