@@ -19,10 +19,10 @@ def export_aseprite_files():
                     "--sheet", output_image,
                     "--data", output_json,
                     "--filename-format", "{tag}_{tagframe}",
-                    "--shape-padding", "1",
-                    "--sheet-pack",
+                    # "--shape-padding", "1",
+                    # "--sheet-pack",
                     "--list-tags",
-                    "--trim"
+                    # "--trim"
                 ]
 
                 with open(os.devnull, 'w') as null_file:

@@ -1,6 +1,7 @@
+import { Scene } from "./core/scene";
 import { SceneOrchestrator } from "./core/sceneOrchestrator";
 import { Environment } from "./environment";
-import { createAnimation } from "./game/rendering/animation";
+import { PlayerBuilder } from "./game/builders/playerBuilder";
 import { report } from "./libraries/lester/lester";
 import { start, useLove } from "./libraries/localLuaDebuggerPatcher/localLuaDebuggerPatcher";
 import { createOrUpdateWindowWithSettings, createSaneDefaultWindowSettings, getCurrentWindowSettings, loadWindowSettings, saveWindowSettings } from "./window";
@@ -42,6 +43,8 @@ if (Environment.IS_TEST) {
 	report();
 	love.event.quit();
 } else {
+	love.graphics.setDefaultFilter("nearest", "nearest");
+
 	const sceneOrchestrator = new SceneOrchestrator();
 
 	const load = () => {
@@ -55,8 +58,13 @@ if (Environment.IS_TEST) {
 			saveWindowSettings(windowSettings);
 		}
 
-		const animations = createAnimation("player");
-		print(animations["Idle"].frames.length);
+		const scene = new Scene();
+		scene.addEntity(new PlayerBuilder(), {
+			x: 100,
+			y: 100,
+		});
+
+		sceneOrchestrator.loadScene(scene);
 	};
 
 	love.run = () => {

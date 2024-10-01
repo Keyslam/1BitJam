@@ -28,9 +28,9 @@ export class Sprite {
 		const sx = flipX === this.isFlipped ? 1 : -1;
 
 		if (this.quad === undefined) {
-			love.graphics.draw(this.image, x, y, 0, sx, 1, this.originX, this.originY);
+			love.graphics.draw(this.image, x, y, 0, sx * 4, 4, this.originX, this.originY);
 		} else {
-			love.graphics.draw(this.image, this.quad, x, y, 0, sx, 1, this.originX, this.originY);
+			love.graphics.draw(this.image, this.quad, x, y, 0, sx * 4, 4, this.originX, this.originY);
 		}
 	}
 }

@@ -55,16 +55,16 @@ export function createAnimation(file: string): Record<string, Animation> {
 				sprite: new Sprite(
 					image,
 					{
-						x: frameData.spriteSourceSize.x,
-						y: frameData.spriteSourceSize.y,
-						width: frameData.spriteSourceSize.w,
-						height: frameData.spriteSourceSize.h,
-						originX: frameData.spriteSourceSize.w / 2,
-						originY: frameData.spriteSourceSize.h / 2,
+						x: frameData.frame.x,
+						y: frameData.frame.y,
+						width: frameData.frame.w,
+						height: frameData.frame.h,
+						originX: frameData.frame.w / 2,
+						originY: frameData.frame.h / 2,
 					},
 					false,
 				),
-				duration: frameData.duration,
+				duration: frameData.duration / 1000,
 			};
 
 			frames.push(frame);

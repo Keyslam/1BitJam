@@ -18,6 +18,12 @@ export class Entity {
 		return this._scene;
 	}
 
+	constructor(...components: Component[]) {
+		for (const component of components) {
+			this.addComponent(component);
+		}
+	}
+
 	public addComponent(component: Component): Entity {
 		const lookupKey = component.constructor.name;
 
@@ -56,7 +62,8 @@ export class Entity {
 		return this;
 	}
 
-	public getComponent<T extends Component>(componentClass: new (...args: unknown[]) => T): T {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public getComponent<T extends Component>(componentClass: new (...args: any[]) => T): T {
 		const component = this.componentLookup[componentClass.name] as T | undefined;
 
 		if (component === undefined) {
@@ -66,7 +73,8 @@ export class Entity {
 		return component;
 	}
 
-	public tryGetComponent<T extends Component>(componentClass: new (...args: unknown[]) => T): T | undefined {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public tryGetComponent<T extends Component>(componentClass: new (...args: any[]) => T): T | undefined {
 		return this.componentLookup[componentClass.name] as T | undefined;
 	}
 
