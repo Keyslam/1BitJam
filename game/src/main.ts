@@ -1,5 +1,6 @@
 import { SceneOrchestrator } from "./core/sceneOrchestrator";
 import { Environment } from "./environment";
+import { createAnimation } from "./game/rendering/animation";
 import { report } from "./libraries/lester/lester";
 import { start, useLove } from "./libraries/localLuaDebuggerPatcher/localLuaDebuggerPatcher";
 import { createOrUpdateWindowWithSettings, createSaneDefaultWindowSettings, getCurrentWindowSettings, loadWindowSettings, saveWindowSettings } from "./window";
@@ -41,22 +42,29 @@ if (Environment.IS_TEST) {
 	report();
 	love.event.quit();
 } else {
-	{
-		const windowSettings = loadWindowSettings() ?? createSaneDefaultWindowSettings();
-		createOrUpdateWindowWithSettings(windowSettings);
-	}
-
-	{
-		const windowSettings = getCurrentWindowSettings();
-		saveWindowSettings(windowSettings);
-	}
-
 	const sceneOrchestrator = new SceneOrchestrator();
+
+	const load = () => {
+		{
+			const windowSettings = loadWindowSettings() ?? createSaneDefaultWindowSettings();
+			createOrUpdateWindowWithSettings(windowSettings);
+		}
+
+		{
+			const windowSettings = getCurrentWindowSettings();
+			saveWindowSettings(windowSettings);
+		}
+
+		const animations = createAnimation("player");
+		print(animations["Idle"].frames.length);
+	};
 
 	love.run = () => {
 		const tickRate = 1 / 60;
 
 		let accumulator: number = 0.0;
+
+		load();
 
 		return () => {
 			const dt = love.timer.step();

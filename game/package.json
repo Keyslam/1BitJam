@@ -1,7 +1,7 @@
 {
 	"scripts": {
 		"develop": "npm run -s clean && tstl -p tsconfig.json --watch",
-		"clean": "if exist (rmdir build /s /q)",
+		"clean": "rmdir build /s /q && mkdir build && cd build && mklink /J assets ..\\src\\assets",
 		"lint": "eslint .",
 		"lint:fix": "eslint --fix ."
 	},
