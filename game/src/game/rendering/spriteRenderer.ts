@@ -34,6 +34,6 @@ export class SpriteRenderer extends Component {
 			return;
 		}
 
-		this.renderService.drawSprite(this.sprite, this.position.x, this.position.y, "background");
+		this.renderService.drawSprite(this.sprite, this.position.x, this.position.y, this.isFlipped, "background");
 	}
 }

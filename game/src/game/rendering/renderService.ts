@@ -58,14 +58,18 @@ export class RenderService extends Service {
 		});
 	}
 
-	public drawSprite(sprite: Sprite, x: number, y: number, renderLayer: RenderLayer): void {
+	public drawSprite(sprite: Sprite, x: number, y: number, flipped: boolean, renderLayer: RenderLayer): void {
 		this.getBuffer(renderLayer).push(() => {
 			love.graphics.setColor(1, 1, 1, 1);
 
 			const image = this.resourceService.getImage(sprite.image);
 
+			const sx = flipped ? -1 : 1;
+			const ox = sprite.viewport.width / 2;
+			const oy = sprite.viewport.height / 2;
+
 			const quad = love.graphics.newQuad(sprite.viewport.x, sprite.viewport.y, sprite.viewport.width, sprite.viewport.height, image);
-			love.graphics.draw(image, quad, x, y);
+			love.graphics.draw(image, quad, x, y, 0, sx, 1, ox, oy);
 		});
 	}
 
