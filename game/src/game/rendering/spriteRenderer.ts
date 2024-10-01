@@ -1,8 +1,11 @@
 import { Component } from "../../core/component";
 import { Position } from "../common/position";
+import { RenderService } from "./renderService";
 import { Sprite } from "./sprite";
 
 export class SpriteRenderer extends Component {
+	private renderService!: RenderService;
+
 	private position!: Position;
 
 	private _sprite: Sprite | undefined;
@@ -21,10 +24,16 @@ export class SpriteRenderer extends Component {
 	}
 
 	public override onFinalize(): void {
-		this.position = this.entity.getComponent(Position);
+		this.renderService = this.injectService(RenderService);
+
+		this.position = this.inject(Position);
 	}
 
 	public override onRender() {
-		this.sprite?.draw(this.position.x, this.position.y, this.isFlipped);
+		if (!this.sprite) {
+			return;
+		}
+
+		this.renderService.drawSprite(this.sprite, this.position.x, this.position.y, "background");
 	}
 }

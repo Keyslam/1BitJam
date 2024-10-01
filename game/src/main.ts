@@ -2,6 +2,8 @@ import { Scene } from "./core/scene";
 import { SceneOrchestrator } from "./core/sceneOrchestrator";
 import { Environment } from "./environment";
 import { PlayerBuilder } from "./game/builders/playerBuilder";
+import { ResourceService } from "./game/common/resourceService";
+import { RenderService } from "./game/rendering/renderService";
 import { report } from "./libraries/lester/lester";
 import { start, useLove } from "./libraries/localLuaDebuggerPatcher/localLuaDebuggerPatcher";
 import { createOrUpdateWindowWithSettings, createSaneDefaultWindowSettings, getCurrentWindowSettings, loadWindowSettings, saveWindowSettings } from "./window";
@@ -44,6 +46,7 @@ if (Environment.IS_TEST) {
 	love.event.quit();
 } else {
 	love.graphics.setDefaultFilter("nearest", "nearest");
+	love.graphics.setLineStyle("rough");
 
 	const sceneOrchestrator = new SceneOrchestrator();
 
@@ -58,7 +61,11 @@ if (Environment.IS_TEST) {
 			saveWindowSettings(windowSettings);
 		}
 
-		const scene = new Scene();
+		const scene = new Scene( //
+			new RenderService(320, 180),
+			new ResourceService(),
+		);
+
 		scene.addEntity(new PlayerBuilder(), {
 			x: 100,
 			y: 100,
@@ -101,6 +108,7 @@ if (Environment.IS_TEST) {
 				love.graphics.origin();
 				const interpolation = accumulator / tickRate;
 				sceneOrchestrator.onRender(interpolation);
+				sceneOrchestrator.onGui(interpolation);
 				love.graphics.present();
 			}
 

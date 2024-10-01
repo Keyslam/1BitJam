@@ -41,8 +41,6 @@ export function createAnimation(file: string): Record<string, Animation> {
 
 	const data = decode(serializedData) as AsepriteFrameData;
 
-	const image = love.graphics.newImage(`assets/${data.meta.image}`);
-
 	for (const frameTag of data.meta.frameTags) {
 		
 		const frames: Frame[] = [];
@@ -52,9 +50,9 @@ export function createAnimation(file: string): Record<string, Animation> {
 			const frameData = data.frames[`${frameTag.name}_${i}`];
 
 			const frame: Frame = {
-				sprite: new Sprite(
-					image,
-					{
+				sprite: {
+					image: data.meta.image,
+					viewport: {
 						x: frameData.frame.x,
 						y: frameData.frame.y,
 						width: frameData.frame.w,
@@ -62,8 +60,7 @@ export function createAnimation(file: string): Record<string, Animation> {
 						originX: frameData.frame.w / 2,
 						originY: frameData.frame.h / 2,
 					},
-					false,
-				),
+				},
 				duration: frameData.duration / 1000,
 			};
 
