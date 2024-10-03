@@ -7,7 +7,7 @@ function lerp(a: number, b: number, alpha: number): number {
 }
 
 export class CameraService extends Service {
-	private static speed = 10;
+	private static speed = 0.2;
 
 	private target: Entity | undefined;
 
@@ -24,13 +24,13 @@ export class CameraService extends Service {
 		}
 	}
 
-	public override postUpdate(dt: number): void {
+	public override postFixedUpdate(): void {
 		const targetPosition = this.target?.tryGetComponent(Position);
 		if (targetPosition === undefined) {
 			return;
 		}
 
-		this.x = lerp(this.x, targetPosition.x, CameraService.speed * dt);
-		this.y = lerp(this.y, targetPosition.y, CameraService.speed * dt);
+		this.x = lerp(this.x, targetPosition.x, CameraService.speed);
+		this.y = lerp(this.y, targetPosition.y, CameraService.speed);
 	}
 }

@@ -23,7 +23,7 @@ export class RenderService extends Service {
 
 		this.resolutionX = resolutionX;
 		this.resolutionY = resolutionY;
-		this.canvas = love.graphics.newCanvas(resolutionX, resolutionY);
+		this.canvas = love.graphics.newCanvas(resolutionX + 2, resolutionY + 2);
 	}
 
 	public override onFinalize(): void {
@@ -92,8 +92,8 @@ export class RenderService extends Service {
 		const [r, g, b, a] = love.math.colorFromBytes(33, 6, 19, 255);
 		love.graphics.clear(r, g, b, a);
 
-		const cameraOffsetX = this.cameraService.x - this.resolutionX / 2;
-		const cameraOffsetY = this.cameraService.y - this.resolutionY / 2;
+		const cameraOffsetX = Math.floor(this.cameraService.x) - this.resolutionX / 2;
+		const cameraOffsetY = Math.floor(this.cameraService.y) - this.resolutionY / 2;
 
 		love.graphics.translate(-cameraOffsetX, -cameraOffsetY);
 
@@ -113,8 +113,15 @@ export class RenderService extends Service {
 		love.graphics.setCanvas();
 
 		const { scaleFactor, offsetX, offsetY } = this.getScaleAndOffset();
+		const cameraRemainderX = (this.cameraService.x % 1) * scaleFactor;
+		const cameraRemainderY = (this.cameraService.y % 1) * scaleFactor;
+
 		love.graphics.setColor(1, 1, 1, 1);
-		love.graphics.draw(this.canvas, offsetX, offsetY, 0, scaleFactor, scaleFactor);
+		love.graphics.setScissor(offsetX, offsetY, this.resolutionX * scaleFactor, this.resolutionY * scaleFactor);
+		love.graphics.draw(this.canvas, offsetX - cameraRemainderX - 1, offsetY - cameraRemainderY - 1, 0, scaleFactor, scaleFactor);
+		love.graphics.setScissor();
+
+		love.graphics.circle("fill", love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 3);
 	}
 
 	private getScaleAndOffset(): { scaleFactor: number; offsetX: number; offsetY: number } {
