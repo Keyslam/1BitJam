@@ -3,6 +3,7 @@ import { SceneOrchestrator } from "./core/sceneOrchestrator";
 import { Environment } from "./environment";
 import { ResourceService } from "./game/common/resourceService";
 import { LevelLoaderService } from "./game/levels/levelLoaderService";
+import { CameraService } from "./game/rendering/cameraService";
 import { RenderService } from "./game/rendering/renderService";
 import { report } from "./libraries/lester/lester";
 import { start, useLove } from "./libraries/localLuaDebuggerPatcher/localLuaDebuggerPatcher";
@@ -65,6 +66,7 @@ if (Environment.IS_TEST) {
 		}
 
 		const scene = new Scene( //
+			new CameraService(),
 			new RenderService(320, 180),
 			new ResourceService(),
 			new LevelLoaderService(),

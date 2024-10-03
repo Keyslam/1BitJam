@@ -1,8 +1,11 @@
 import { Service } from "../../core/service";
 import { LayerBuilder } from "../builders/layerBuilder";
 import { PlayerBuilder } from "../builders/playerBuilder";
+import { CameraService } from "../rendering/cameraService";
 
 export class LevelLoaderService extends Service {
+	private cameraService!: CameraService;
+
 	private playerBuilder = new PlayerBuilder();
 	private layerBuilder = new LayerBuilder();
 
@@ -18,6 +21,8 @@ export class LevelLoaderService extends Service {
 	}
 
 	public override onFinalize(): void {
+		this.cameraService = this.inject(CameraService);
+
 		ldtk.level("Level_0");
 	}
 
@@ -26,10 +31,12 @@ export class LevelLoaderService extends Service {
 
 	private onEntity(entity: LdtkEntity): void {
 		if (entity.id === "Player") {
-			this.scene.addEntity(this.playerBuilder, {
+			const player = this.scene.addEntity(this.playerBuilder, {
 				x: entity.x,
 				y: entity.y,
 			});
+
+			this.cameraService.startFollowing(player, true);
 		}
 	}
 

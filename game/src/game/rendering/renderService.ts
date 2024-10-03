@@ -3,11 +3,13 @@ import { Service } from "../../core/service";
 import { Color } from "./color";
 import { Sprite } from "./sprite";
 import { ResourceService } from "../common/resourceService";
+import { CameraService } from "./cameraService";
 
 export type RenderLayer = "background" | "foreground";
 
 export class RenderService extends Service {
 	private resourceService!: ResourceService;
+	private cameraService!: CameraService;
 
 	private resolutionX: number;
 	private resolutionY: number;
@@ -26,6 +28,7 @@ export class RenderService extends Service {
 
 	public override onFinalize(): void {
 		this.resourceService = this.inject(ResourceService);
+		this.cameraService = this.inject(CameraService);
 	}
 
 	private getBuffer(renderLayer: RenderLayer): (() => void)[] {
@@ -89,6 +92,11 @@ export class RenderService extends Service {
 		const [r, g, b, a] = love.math.colorFromBytes(33, 6, 19, 255);
 		love.graphics.clear(r, g, b, a);
 
+		const cameraOffsetX = this.cameraService.x - this.resolutionX / 2;
+		const cameraOffsetY = this.cameraService.y - this.resolutionY / 2;
+
+		love.graphics.translate(-cameraOffsetX, -cameraOffsetY);
+
 		for (const backgroundOperation of this.backgroundBuffer) {
 			backgroundOperation();
 		}
@@ -99,6 +107,8 @@ export class RenderService extends Service {
 
 		this.backgroundBuffer = [];
 		this.foregroundBuffer = [];
+
+		love.graphics.translate(cameraOffsetX, cameraOffsetY);
 
 		love.graphics.setCanvas();
 
