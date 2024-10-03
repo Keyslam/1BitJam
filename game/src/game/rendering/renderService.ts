@@ -120,8 +120,6 @@ export class RenderService extends Service {
 		love.graphics.setScissor(offsetX, offsetY, this.resolutionX * scaleFactor, this.resolutionY * scaleFactor);
 		love.graphics.draw(this.canvas, offsetX - cameraRemainderX - 1, offsetY - cameraRemainderY - 1, 0, scaleFactor, scaleFactor);
 		love.graphics.setScissor();
-
-		love.graphics.circle("fill", love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 3);
 	}
 
 	private getScaleAndOffset(): { scaleFactor: number; offsetX: number; offsetY: number } {

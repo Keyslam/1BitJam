@@ -3,6 +3,7 @@ import { SceneOrchestrator } from "./core/sceneOrchestrator";
 import { Environment } from "./environment";
 import { ResourceService } from "./game/common/resourceService";
 import { LevelLoaderService } from "./game/levels/levelLoaderService";
+import { TilemapService } from "./game/levels/tilemapService";
 import { CameraService } from "./game/rendering/cameraService";
 import { RenderService } from "./game/rendering/renderService";
 import { report } from "./libraries/lester/lester";
@@ -70,6 +71,7 @@ if (Environment.IS_TEST) {
 			new RenderService(320, 180),
 			new ResourceService(),
 			new LevelLoaderService(),
+			new TilemapService(),
 		);
 
 		sceneOrchestrator.loadScene(scene);

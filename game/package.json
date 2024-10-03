@@ -1,6 +1,8 @@
 {
 	"scripts": {
 		"develop": "npm run -s clean && tstl -p tsconfig.json --watch",
+		"build-preview": "npm run -s clean && tstl -p tsconfig.preview.json & cd build && makelove --config ../makelove.toml",
+		"build-release": "npm run -s clean && tstl -p tsconfig.release.json & cd build && makelove --config ../makelove.toml",
 		"clean": "rmdir build /s /q && mkdir build && cd build && mklink /J assets ..\\src\\assets",
 		"lint": "eslint .",
 		"lint:fix": "eslint --fix ."

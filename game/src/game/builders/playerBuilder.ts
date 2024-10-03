@@ -2,6 +2,7 @@ import { Builder } from "../../core/builder";
 import { Entity } from "../../core/entity";
 import { Position } from "../common/position";
 import { PlayerControls } from "../locomotion/playerControls";
+import { Body } from "../physics/body";
 import { Mass } from "../physics/mass";
 import { Velocity } from "../physics/velocity";
 import { AnimatedSprite } from "../rendering/animatedSprite";
@@ -23,6 +24,12 @@ export class PlayerBuilder extends Builder<PlayerProps> {
 			new AnimatedSprite(this.animations, "Idle"),
 			new Velocity(),
 			new Mass(),
+			new Body({
+				top: -3,
+				bottom: 12,
+				left: -8,
+				right: 7,
+			}),
 			new PlayerControls(),
 		);
 	}

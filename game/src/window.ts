@@ -73,5 +73,5 @@ export function createOrUpdateWindowWithSettings(windowSettings: WindowSettings)
 		usedpiscale: undefined,
 	});
 
-	love.window.setTitle("Spectral Shift");
+	love.window.setTitle("1 Bit Jam");
 }

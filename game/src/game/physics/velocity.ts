@@ -1,8 +1,9 @@
 import { Component } from "../../core/component";
 import { Position } from "../common/position";
+import { Body } from "./body";
 
 export class Velocity extends Component {
-	private position!: Position;
+	private target!: Position | Body;
 
 	public x: number;
 	public y: number;
@@ -15,11 +16,30 @@ export class Velocity extends Component {
 	}
 
 	public override onFinalize(): void {
-		this.position = this.inject(Position);
+		const target = this.tryInject(Body) || this.tryInject(Position);
+
+		if (target === undefined) {
+			throw new Error("Entity doesn't have Position nor Body");
+		}
+
+		this.target = target;
 	}
 
 	public override onFixedUpdate(): void {
-		this.position.x += this.x;
-		this.position.y += this.y;
+		if (this.target instanceof Position) {
+			this.target.x += this.x;
+			this.target.y += this.y;
+		} else if (this.target instanceof Body) {
+			const didMoveX = this.target.moveX(this.x);
+			const didMoveY = this.target.moveY(this.y);
+
+			if (!didMoveX) {
+				this.x = this.x * -0.8;
+			}
+
+			if (!didMoveY) {
+				this.y = 0;
+			}
+		}
 	}
 }
