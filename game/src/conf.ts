@@ -1,7 +1,7 @@
 import { Config } from "love";
 
 love.conf = (config: Config) => {
-	config.identity = "Spectral Shift";
+	config.identity = "1BitJam";
 	config.version = "11.5";
 
 	config.console = true;

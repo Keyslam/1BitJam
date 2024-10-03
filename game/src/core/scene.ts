@@ -10,7 +10,7 @@ export class Scene {
 
 	constructor(...services: Service[]) {
 		for (const service of services) {
-			service["scene"] = this;
+			service["_scene"] = this;
 
 			this.serviceLookup[service.constructor.name] = service;
 			this.services.push(service);

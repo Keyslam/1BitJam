@@ -1,3 +1,5 @@
+import { Image } from "love.graphics";
+
 export interface Viewport {
 	x: number;
 	y: number;
@@ -8,6 +10,6 @@ export interface Viewport {
 }
 
 export interface Sprite {
-	image: string;
-	viewport: Viewport;
+	image: Image | string;
+	viewport: Viewport | undefined;
 }

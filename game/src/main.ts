@@ -1,12 +1,15 @@
 import { Scene } from "./core/scene";
 import { SceneOrchestrator } from "./core/sceneOrchestrator";
 import { Environment } from "./environment";
-import { PlayerBuilder } from "./game/builders/playerBuilder";
 import { ResourceService } from "./game/common/resourceService";
+import { LevelLoaderService } from "./game/levels/levelLoaderService";
 import { RenderService } from "./game/rendering/renderService";
 import { report } from "./libraries/lester/lester";
 import { start, useLove } from "./libraries/localLuaDebuggerPatcher/localLuaDebuggerPatcher";
 import { createOrUpdateWindowWithSettings, createSaneDefaultWindowSettings, getCurrentWindowSettings, loadWindowSettings, saveWindowSettings } from "./window";
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+_G.ldtk = require("libraries/ldtk/ldtk");
 
 if (Environment.IS_DEBUG) {
 	useLove();
@@ -64,12 +67,8 @@ if (Environment.IS_TEST) {
 		const scene = new Scene( //
 			new RenderService(320, 180),
 			new ResourceService(),
+			new LevelLoaderService(),
 		);
-
-		scene.addEntity(new PlayerBuilder(), {
-			x: 100,
-			y: 100,
-		});
 
 		sceneOrchestrator.loadScene(scene);
 	};

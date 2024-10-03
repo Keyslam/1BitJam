@@ -62,21 +62,32 @@ export class RenderService extends Service {
 		this.getBuffer(renderLayer).push(() => {
 			love.graphics.setColor(1, 1, 1, 1);
 
-			const image = this.resourceService.getImage(sprite.image);
+			const image = typeof sprite.image === "string" ? this.resourceService.getImage(sprite.image) : sprite.image;
 
 			const sx = flipped ? -1 : 1;
-			const ox = sprite.viewport.width / 2;
-			const oy = sprite.viewport.height / 2;
+			const ox = sprite.viewport !== undefined ? sprite.viewport.width / 2 : image.getWidth() / 2;
+			const oy = sprite.viewport !== undefined ? sprite.viewport.height / 2 : image.getHeight() / 2;
 
-			const quad = love.graphics.newQuad(sprite.viewport.x, sprite.viewport.y, sprite.viewport.width, sprite.viewport.height, image);
-			love.graphics.draw(image, quad, x, y, 0, sx, 1, ox, oy);
+			const quad = sprite.viewport !== undefined ? love.graphics.newQuad(sprite.viewport.x, sprite.viewport.y, sprite.viewport.width, sprite.viewport.height, image) : undefined;
+
+			if (quad) {
+				love.graphics.draw(image, quad, x, y, 0, sx, 1, ox, oy);
+			} else {
+				love.graphics.draw(image, x, y, 0, sx, 1, ox, oy);
+			}
 		});
+	}
+
+	public drawLambda(lambda: () => void, renderLayer: RenderLayer): void {
+		this.getBuffer(renderLayer).push(lambda);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public postGui(interpolation: number): void {
 		love.graphics.setCanvas(this.canvas);
-		love.graphics.clear(0, 0, 0, 0);
+
+		const [r, g, b, a] = love.math.colorFromBytes(33, 6, 19, 255);
+		love.graphics.clear(r, g, b, a);
 
 		for (const backgroundOperation of this.backgroundBuffer) {
 			backgroundOperation();

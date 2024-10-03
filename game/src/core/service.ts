@@ -2,7 +2,11 @@ import { Scene } from "./scene";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export abstract class Service {
-	private scene!: Scene;
+	private _scene!: Scene;
+
+	public get scene(): Scene {
+		return this._scene;
+	}
 
 	public onFinalize(): void {}
 

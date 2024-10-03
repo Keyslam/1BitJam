@@ -34,7 +34,7 @@ export class Entity {
 		this.components.push(component);
 
 		if (component.onFixedUpdate !== Component.prototype.onFixedUpdate) {
-			this.onUpdateComponents.push(component);
+			this.onFixedUpdateComponents.push(component);
 		}
 
 		if (component.onUpdate !== Component.prototype.onUpdate) {
