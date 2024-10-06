@@ -8,6 +8,8 @@ export class Scene {
 	private serviceLookup: Record<string, Service> = {};
 	private services: Service[] = [];
 
+	private destroyedEntities: Entity[] = [];
+
 	constructor(...services: Service[]) {
 		for (const service of services) {
 			service["_scene"] = this;
@@ -38,6 +40,7 @@ export class Scene {
 		for (const entity of this.entities) {
 			entity.onFixedUpdate();
 		}
+		this.destroyEntities();
 
 		for (const service of this.services) {
 			service.postFixedUpdate();
@@ -52,10 +55,12 @@ export class Scene {
 		for (const entity of this.entities) {
 			entity.onUpdate(dt);
 		}
+		this.destroyEntities();
 
 		for (const service of this.services) {
 			service.postUpdate(dt);
 		}
+		
 	}
 
 	public onRender(interpolation: number): void {
@@ -95,5 +100,17 @@ export class Scene {
 		}
 
 		return service;
+	}
+
+	public destroy(entity: Entity): void {
+		this.destroyedEntities.push(entity);
+	}
+
+	private destroyEntities(): void {
+		for (const destroyedEntity of this.destroyedEntities) {
+			this.entities = this.entities.filter((x) => x !== destroyedEntity);
+		}
+
+		this.destroyedEntities = [];
 	}
 }

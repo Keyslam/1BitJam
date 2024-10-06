@@ -1,7 +1,7 @@
 import { Builder } from "../../core/builder";
 import { Entity } from "../../core/entity";
 import { Position } from "../common/position";
-import { PlayerControls } from "../locomotion/playerControls";
+import { PlayerControls } from "../behaviours/playerControls";
 import { Body } from "../physics/body";
 import { Mass } from "../physics/mass";
 import { Velocity } from "../physics/velocity";

@@ -1,11 +1,13 @@
 import { Scene } from "./core/scene";
 import { SceneOrchestrator } from "./core/sceneOrchestrator";
 import { Environment } from "./environment";
+import { AudioService } from "./game/audio/audioService";
 import { ResourceService } from "./game/common/resourceService";
 import { LevelLoaderService } from "./game/levels/levelLoaderService";
 import { TilemapService } from "./game/levels/tilemapService";
 import { CameraService } from "./game/rendering/cameraService";
 import { RenderService } from "./game/rendering/renderService";
+import { ScheduleService } from "./game/scheduling/scheduleService";
 import { report } from "./libraries/lester/lester";
 import { start, useLove } from "./libraries/localLuaDebuggerPatcher/localLuaDebuggerPatcher";
 import { createOrUpdateWindowWithSettings, createSaneDefaultWindowSettings, getCurrentWindowSettings, loadWindowSettings, saveWindowSettings } from "./window";
@@ -72,6 +74,8 @@ if (Environment.IS_TEST) {
 			new ResourceService(),
 			new LevelLoaderService(),
 			new TilemapService(),
+			new ScheduleService(),
+			new AudioService(),
 		);
 
 		sceneOrchestrator.loadScene(scene);

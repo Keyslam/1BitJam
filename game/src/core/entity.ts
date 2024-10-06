@@ -130,4 +130,8 @@ export class Entity {
 			hasOnGui: this.onGuiComponents.length > 0,
 		};
 	}
+
+	public destroy(): void {
+		this.scene.destroy(this);
+	}
 }

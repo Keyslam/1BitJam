@@ -38,5 +38,7 @@ export abstract class Component {
 		return this.entity.scene.getService(serviceClass);
 	}
 
-	protected destroy(): void {}
+	protected destroy(): void {
+		this.entity.destroy();
+	}
 }

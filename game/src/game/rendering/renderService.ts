@@ -1,6 +1,6 @@
 import { Canvas, DrawMode } from "love.graphics";
 import { Service } from "../../core/service";
-import { Color } from "./color";
+import { Color, Colors } from "./color";
 import { Sprite } from "./sprite";
 import { ResourceService } from "../common/resourceService";
 import { CameraService } from "./cameraService";
@@ -88,9 +88,7 @@ export class RenderService extends Service {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public postGui(interpolation: number): void {
 		love.graphics.setCanvas(this.canvas);
-
-		const [r, g, b, a] = love.math.colorFromBytes(33, 6, 19, 255);
-		love.graphics.clear(r, g, b, a);
+		love.graphics.clear(Colors.dark.r, Colors.dark.g, Colors.dark.b, Colors.dark.a);
 
 		const cameraOffsetX = Math.floor(this.cameraService.x) - this.resolutionX / 2;
 		const cameraOffsetY = Math.floor(this.cameraService.y) - this.resolutionY / 2;

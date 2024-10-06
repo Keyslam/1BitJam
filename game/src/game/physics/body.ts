@@ -1,4 +1,5 @@
 import { Component } from "../../core/component";
+import { Event } from "../../core/event";
 import { Position } from "../common/position";
 import { TilemapService } from "../levels/tilemapService";
 import { Colors } from "../rendering/color";
@@ -21,6 +22,8 @@ export class Body extends Component {
 	private _ignoreOneWay: boolean = false;
 	/* prettier-ignore */ public get ignoreOneWay() { return this._ignoreOneWay; }
 	/* prettier-ignore */ public set ignoreOneWay(ignoreOneWay: boolean) { this._ignoreOneWay = ignoreOneWay; }
+
+	public onCollision = new Event<{ x: number; y: number }>();
 
 	constructor(boundingBox: BoundingBox) {
 		super();
@@ -47,7 +50,7 @@ export class Body extends Component {
 		}
 	}
 
-	public moveX(amount: number): boolean {
+	public moveX(amount: number): void {
 		this.remainderX += amount;
 
 		let moveX = Math.round(this.remainderX);
@@ -64,17 +67,14 @@ export class Body extends Component {
 					this.position.x = targetX;
 					moveX -= sign;
 				} else {
-					// this.onCollision.emit({ x: sign, y: 0 });
-					// this.velocity.x = 0;
-					return false;
+					this.onCollision.emit({ x: sign, y: 0 });
+					return;
 				}
 			}
 		}
-
-		return true;
 	}
 
-	public moveY(amount: number): boolean {
+	public moveY(amount: number): void {
 		this.remainderY += amount;
 
 		let moveY = Math.round(this.remainderY);
@@ -91,13 +91,10 @@ export class Body extends Component {
 					this.position.y = targetY;
 					moveY -= sign;
 				} else {
-					// this.onCollision.emit({ x: 0, y: sign });
-					// this.velocity.y = 0;
-					return false;
+					this.onCollision.emit({ x: 0, y: sign });
+					return;
 				}
 			}
 		}
-
-		return true;
 	}
 }

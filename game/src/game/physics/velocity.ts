@@ -30,16 +30,8 @@ export class Velocity extends Component {
 			this.target.x += this.x;
 			this.target.y += this.y;
 		} else if (this.target instanceof Body) {
-			const didMoveX = this.target.moveX(this.x);
-			const didMoveY = this.target.moveY(this.y);
-
-			if (!didMoveX) {
-				this.x = this.x * -0.8;
-			}
-
-			if (!didMoveY) {
-				this.y = 0;
-			}
+			this.target.moveX(this.x);
+			this.target.moveY(this.y);
 		}
 	}
 }
