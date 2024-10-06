@@ -62,9 +62,10 @@ export class Body extends Component {
 			while (moveX !== 0) {
 				const targetX = this.position.x + sign;
 
-				const canMove = this.tilemapService.query(this.boundingBox, targetX, this.position.y);
-				if (canMove) {
+				const result = this.canMoveX(this.boundingBox, targetX, this.position.y);
+				if (result.canMove) {
 					this.position.x = targetX;
+					this.position.y += result.offsetY;
 					moveX -= sign;
 				} else {
 					this.onCollision.emit({ x: sign, y: 0 });
@@ -86,8 +87,9 @@ export class Body extends Component {
 			while (moveY !== 0) {
 				const targetY = this.position.y + sign;
 
-				const canMove = this.tilemapService.query(this.boundingBox, this.position.x, targetY);
-				if (canMove) {
+				const result = this.canMoveY(this.boundingBox, this.position.x, targetY);
+				if (result.canMove) {
+					this.position.x += result.offsetX;
 					this.position.y = targetY;
 					moveY -= sign;
 				} else {
@@ -96,5 +98,37 @@ export class Body extends Component {
 				}
 			}
 		}
+	}
+
+	private canMoveX(boundingBox: BoundingBox, targetX: number, targetY: number): { canMove: boolean; offsetY: number } {
+		if (this.tilemapService.query(boundingBox, targetX, targetY)) {
+			return { canMove: true, offsetY: 0 };
+		}
+
+		if (this.tilemapService.query(boundingBox, targetX, targetY - 1)) {
+			return { canMove: true, offsetY: -1 };
+		}
+
+		if (this.tilemapService.query(boundingBox, targetX, targetY + 1)) {
+			return { canMove: true, offsetY: 1 };
+		}
+
+		return { canMove: false, offsetY: 0 };
+	}
+
+	private canMoveY(boundingBox: BoundingBox, targetX: number, targetY: number): { canMove: boolean; offsetX: number } {
+		if (this.tilemapService.query(boundingBox, targetX, targetY)) {
+			return { canMove: true, offsetX: 0 };
+		}
+
+		if (this.tilemapService.query(boundingBox, targetX - 1, targetY)) {
+			return { canMove: true, offsetX: -1 };
+		}
+
+		if (this.tilemapService.query(boundingBox, targetX + 1, targetY)) {
+			return { canMove: true, offsetX: 1 };
+		}
+
+		return { canMove: false, offsetX: 0 };
 	}
 }

@@ -50,16 +50,45 @@ export class LevelLoaderService extends Service {
 		});
 
 		for (const tile of layer.tiles) {
-			this.tilemapService.setTile( //
-				Math.ceil(tile.px[0] / TilemapService.tileSize),
-				Math.ceil(tile.px[1] / TilemapService.tileSize),
-				{
-					top: 0,
-					left: 0,
-					right: 16,
-					bottom: 16,
-				}
-			);
+			if (tile.t === 26) {
+				this.tilemapService.setTile( //
+					Math.ceil(tile.px[0] / TilemapService.tileSize),
+					Math.ceil(tile.px[1] / TilemapService.tileSize),
+					(bb) => {
+						if (bb.bottom > (TilemapService.tileSize - 1 - bb.right)) {
+							return true;
+						}
+
+						return false;
+					},
+					"slope-right",
+				);
+			} else if (tile.t === 27) {
+				this.tilemapService.setTile( //
+					Math.ceil(tile.px[0] / TilemapService.tileSize),
+					Math.ceil(tile.px[1] / TilemapService.tileSize),
+					(bb) => {
+						if (bb.bottom > bb.left) {
+							return true;
+						}
+
+						return false;
+					},
+					"slope-left",
+				);
+			} else {
+				this.tilemapService.setTile( //
+					Math.ceil(tile.px[0] / TilemapService.tileSize),
+					Math.ceil(tile.px[1] / TilemapService.tileSize),
+					{
+						top: 0,
+						left: 0,
+						right: 16,
+						bottom: 16,
+					},
+					"solid"
+				);
+			}
 		}
 	}
 
