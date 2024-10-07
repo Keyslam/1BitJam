@@ -70,13 +70,16 @@ export class PlayerControls extends Component {
 		const slope = this.tilemapService.isOnSlope(feetSensor, this.position.x, this.position.y);
 
 		if (slope !== false) {
-			if (slope === "slope-right") {
-				this.spriteRenderer.isFlipped = true;
-			} else {
-				this.spriteRenderer.isFlipped = false;
+			if (this.velocity.y > 0) {
 				
+				if (slope === "slope-right") {
+					this.spriteRenderer.isFlipped = true;
+				} else {
+					this.spriteRenderer.isFlipped = false;
+					
+				}
+				this.animatedSprite.play("Slide");
 			}
-			this.animatedSprite.play("Slide");
 		} else {
 			
 			if (isOnGround) {

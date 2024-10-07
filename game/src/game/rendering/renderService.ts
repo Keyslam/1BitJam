@@ -4,12 +4,14 @@ import { Color, Colors } from "./color";
 import { Sprite } from "./sprite";
 import { ResourceService } from "../common/resourceService";
 import { CameraService } from "./cameraService";
+import { ScheduleService } from "../scheduling/scheduleService";
 
 export type RenderLayer = "background" | "foreground";
 
 export class RenderService extends Service {
 	private resourceService!: ResourceService;
 	private cameraService!: CameraService;
+	private scheduleService!: ScheduleService;
 
 	private resolutionX: number;
 	private resolutionY: number;
@@ -17,6 +19,8 @@ export class RenderService extends Service {
 
 	private backgroundBuffer: (() => void)[] = [];
 	private foregroundBuffer: (() => void)[] = [];
+
+	private alpha = 1;
 
 	constructor(resolutionX: number, resolutionY: number) {
 		super();
@@ -29,6 +33,7 @@ export class RenderService extends Service {
 	public override onFinalize(): void {
 		this.resourceService = this.inject(ResourceService);
 		this.cameraService = this.inject(CameraService);
+		this.scheduleService = this.inject(ScheduleService);
 	}
 
 	private getBuffer(renderLayer: RenderLayer): (() => void)[] {
@@ -114,7 +119,7 @@ export class RenderService extends Service {
 		const cameraRemainderX = (this.cameraService.x % 1) * scaleFactor;
 		const cameraRemainderY = (this.cameraService.y % 1) * scaleFactor;
 
-		love.graphics.setColor(1, 1, 1, 1);
+		love.graphics.setColor(1, 1, 1, this.alpha);
 		love.graphics.setScissor(offsetX, offsetY, this.resolutionX * scaleFactor, this.resolutionY * scaleFactor);
 		love.graphics.draw(this.canvas, offsetX - cameraRemainderX - 1, offsetY - cameraRemainderY - 1, 0, scaleFactor, scaleFactor);
 		love.graphics.setScissor();
@@ -133,5 +138,29 @@ export class RenderService extends Service {
 			offsetX,
 			offsetY,
 		};
+	}
+
+	public async fadeOut(instant: boolean = false): Promise<void> {
+		if (instant) {
+			this.alpha = 0;
+			return;
+		}
+
+		while (this.alpha !== 0) {
+			this.alpha = Math.max(0, this.alpha - love.timer.getDelta() * 4);
+			await this.scheduleService.waitForSeconds(0);
+		}
+	}
+
+	public async fadeIn(instant: boolean = false): Promise<void> {
+		if (instant) {
+			this.alpha = 1;
+			return;
+		}
+
+		while (this.alpha !== 1) {
+			this.alpha = Math.min(1, this.alpha + love.timer.getDelta() * 4);
+			await this.scheduleService.waitForSeconds(0);
+		}
 	}
 }

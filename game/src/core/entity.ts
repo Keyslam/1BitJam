@@ -131,6 +131,12 @@ export class Entity {
 		};
 	}
 
+	public start() {
+		for (const component of this.components) {
+			component.onStart();
+		}
+	}
+
 	public destroy(): void {
 		this.scene.destroy(this);
 	}

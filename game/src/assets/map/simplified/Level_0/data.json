@@ -1,10 +1,10 @@
 {
 	"identifier": "Level_0",
 	"uniqueIdentifer": "f5abd210-73f0-11ef-97b0-23f36bc3f937",
-	"x": 0,
-	"y": 0,
-	"width": 752,
-	"height": 208,
+	"x": 16,
+	"y": 2544,
+	"width": 384,
+	"height": 272,
 	"bgColor": "#696A79",
 	"neighbourLevels": [],
 	"customFields" : {},
@@ -16,10 +16,10 @@
 		"Player": [
 			{
 				"id": "Player",
-				"iid": "687b3640-73f0-11ef-bb85-59f4ab326643",
+				"iid": "27e39e20-73f0-11ef-ae42-4303343f1f9a",
 				"layer": "Entities",
-				"x": 400,
-				"y": 176,
+				"x": 144,
+				"y": 224,
 				"width": 16,
 				"height": 16,
 				"color": 12470831,

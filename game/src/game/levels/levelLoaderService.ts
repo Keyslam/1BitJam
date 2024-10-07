@@ -1,6 +1,8 @@
 import { Service } from "../../core/service";
 import { LayerBuilder } from "../builders/layerBuilder";
 import { PlayerBuilder } from "../builders/playerBuilder";
+import { ShroomBuilder } from "../builders/shroomBuilder";
+import { SpikebugBuilder } from "../builders/spikebugBuilder";
 import { CameraService } from "../rendering/cameraService";
 import { TilemapService } from "./tilemapService";
 
@@ -9,6 +11,8 @@ export class LevelLoaderService extends Service {
 	private tilemapService!: TilemapService;
 
 	private playerBuilder = new PlayerBuilder();
+	private shroomBuilder = new ShroomBuilder();
+	private spikebugBuilder = new SpikebugBuilder();
 	private layerBuilder = new LayerBuilder();
 
 	constructor() {
@@ -25,8 +29,10 @@ export class LevelLoaderService extends Service {
 	public override onFinalize(): void {
 		this.cameraService = this.inject(CameraService);
 		this.tilemapService = this.inject(TilemapService);
+	}
 
-		ldtk.level("Level_0");
+	public load(name: string): void {
+		ldtk.level(name);
 	}
 
 	private onLevelLoaded(level: LdtkLevel): void {
@@ -42,6 +48,20 @@ export class LevelLoaderService extends Service {
 
 			this.cameraService.startFollowing(player, true);
 		}
+
+		if (entity.id === "Shroom") {
+			this.scene.addEntity(this.shroomBuilder, {
+				x: entity.x,
+				y: entity.y,
+			});
+		}
+
+		if (entity.id === "Spikebug") {
+			this.scene.addEntity(this.spikebugBuilder, {
+				x: entity.x,
+				y: entity.y,
+			});
+		}
 	}
 
 	private onLayer(layer: LdtkLayer): void {
@@ -50,7 +70,7 @@ export class LevelLoaderService extends Service {
 		});
 
 		for (const tile of layer.tiles) {
-			if (tile.t === 26) {
+			if (tile.t === 26 || tile.t === 89 || tile.t === 108) {
 				this.tilemapService.setTile( //
 					Math.ceil(tile.px[0] / TilemapService.tileSize),
 					Math.ceil(tile.px[1] / TilemapService.tileSize),
@@ -63,7 +83,7 @@ export class LevelLoaderService extends Service {
 					},
 					"slope-right",
 				);
-			} else if (tile.t === 27) {
+			} else if (tile.t === 27 || tile.t === 90 || tile.t === 111) {
 				this.tilemapService.setTile( //
 					Math.ceil(tile.px[0] / TilemapService.tileSize),
 					Math.ceil(tile.px[1] / TilemapService.tileSize),
@@ -93,5 +113,7 @@ export class LevelLoaderService extends Service {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	private onLevelCreated(level: LdtkLevel): void {}
+	private onLevelCreated(level: LdtkLevel): void {
+		this.cameraService.setBounds(level.width, level.height);
+	}
 }

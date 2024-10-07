@@ -1,4 +1,5 @@
 import { Builder } from "./builder";
+import { Component } from "./component";
 import { Entity } from "./entity";
 import { Service } from "./service";
 
@@ -9,6 +10,8 @@ export class Scene {
 	private services: Service[] = [];
 
 	private destroyedEntities: Entity[] = [];
+
+	private addedEntities: Entity[] = [];
 
 	constructor(...services: Service[]) {
 		for (const service of services) {
@@ -28,11 +31,14 @@ export class Scene {
 		entity.finalize(this);
 
 		this.entities.push(entity);
+		this.addedEntities.push(entity);
 
 		return entity;
 	}
 
 	public onFixedUpdate(): void {
+		this.startEntities();
+
 		for (const service of this.services) {
 			service.preFixedUpdate();
 		}
@@ -48,6 +54,8 @@ export class Scene {
 	}
 
 	public onUpdate(dt: number): void {
+		this.startEntities();
+
 		for (const service of this.services) {
 			service.preUpdate(dt);
 		}
@@ -106,11 +114,53 @@ export class Scene {
 		this.destroyedEntities.push(entity);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public findChildByComponent<T extends Component>(componentClass: new (...args: any[]) => T): Entity {
+		for (const entity of this.entities) {
+			if (entity.tryGetComponent(componentClass) !== undefined) {
+				return entity;
+			}
+		}
+
+		throw new Error("Component not found in scene");
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public tryFindChildByComponent<T extends Component>(componentClass: new (...args: any[]) => T): Entity | undefined {
+		for (const entity of this.entities) {
+			if (entity.tryGetComponent(componentClass) !== undefined) {
+				return entity;
+			}
+		}
+
+		return undefined;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public findComponent<T extends Component>(componentClass: new (...args: any[]) => T): T {
+		for (const entity of this.entities) {
+			const component = entity.tryGetComponent(componentClass);
+			if (component !== undefined) {
+				return component;
+			}
+		}
+
+		throw new Error("Component not found in scene");
+	}
+
 	private destroyEntities(): void {
 		for (const destroyedEntity of this.destroyedEntities) {
 			this.entities = this.entities.filter((x) => x !== destroyedEntity);
 		}
 
 		this.destroyedEntities = [];
+	}
+
+	private startEntities(): void {
+		for (const addedEntity of this.addedEntities) {
+			addedEntity.start();
+		}
+
+		this.addedEntities = [];
 	}
 }

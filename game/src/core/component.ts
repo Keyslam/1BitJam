@@ -14,6 +14,7 @@ export abstract class Component {
 	}
 
 	public onFinalize(): void {}
+	public onStart(): void {}
 	public onFixedUpdate(): void {}
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public onUpdate(dt: number): void {}
