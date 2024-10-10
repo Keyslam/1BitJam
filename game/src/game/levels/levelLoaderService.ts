@@ -57,6 +57,8 @@ export class LevelLoaderService extends Service {
 			return;
 		}
 
+		this.goingNext = true;
+
 		if (this.finished) {
 			return;
 		}
@@ -65,11 +67,9 @@ export class LevelLoaderService extends Service {
 		this.scene.destroyAll();
 		await this.scheduleService.waitForSeconds(0.1);
 
-		this.goingNext = true;
 		this.index++;
 
 		try {
-			
 			this.load(`Level_${this.index}`);
 		} catch {
 			this.finished = true;

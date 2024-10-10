@@ -120,7 +120,7 @@ if (Environment.IS_TEST) {
 			}
 
 			{
-
+				
 				await scheduleService.waitForSeconds(0.5);
 				await renderService.fadeIn();
 

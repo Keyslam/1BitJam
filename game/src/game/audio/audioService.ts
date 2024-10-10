@@ -13,8 +13,7 @@ export class AudioService extends Service {
 
 	public playTrack(trackName: string): Source {
 		const source = love.audio.newSource(`assets/track/${trackName}.ogg`, "stream");
-		source.setVolume(0.0);
-		// source.setVolume(0.7);
+		source.setVolume(0.7);
 		source.setLooping(true);
 		source.play();
 
