@@ -42,6 +42,8 @@ export class PlayerControls extends Component {
 	private isGettingUp = false;
 	private isSquish = false;
 
+	public goNext = false;
+
 	public override onFinalize(): void {
 		this.renderService = this.injectService(RenderService);
 		this.tilemapService = this.injectService(TilemapService);
@@ -184,6 +186,10 @@ export class PlayerControls extends Component {
 					}
 				}
 			}
+		}
+
+		if (this.position.y <= 0) {
+			this.goNext = true;
 		}
 	}
 

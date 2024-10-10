@@ -27,6 +27,13 @@ export class CameraService extends Service {
 		}
 	}
 
+	public reset(): void {
+		this.x = 0;
+		this.y = 0;
+		this.boundsH = 0;
+		this.boundsW = 0;
+	}
+
 	public setBounds(w: number, h: number): void {
 		this.boundsW = w;
 		this.boundsH = h;

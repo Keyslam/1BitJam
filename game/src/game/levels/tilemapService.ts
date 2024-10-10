@@ -26,6 +26,12 @@ export class TilemapService extends Service {
 		};
 	}
 
+	public reset() {
+		this.width = 0;
+		this.height = 0;
+		this.tiles = [];
+	}
+
 	public getTile(x: number, y: number): Tile {
 		return this.getTileByKey(this.coordToKey(x, y));
 	}

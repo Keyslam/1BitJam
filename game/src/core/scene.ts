@@ -26,6 +26,12 @@ export class Scene {
 		}
 	}
 
+	public destroyAll() {
+		for (const entity of this.entities) {
+			entity.destroy();
+		}
+	}
+
 	public addEntity<TProps>(builder: Builder<TProps>, props: TProps): Entity {
 		const entity = builder.build(props);
 		entity.finalize(this);

@@ -2,8 +2,10 @@ import { Scene } from "./core/scene";
 import { SceneOrchestrator } from "./core/sceneOrchestrator";
 import { Environment } from "./environment";
 import { AudioService } from "./game/audio/audioService";
+import { PlotBuilder } from "./game/builders/plotBuilder";
 import { SplashScreenBuilder } from "./game/builders/splashScreenBuilder";
 import { TitleScreenBuilder } from "./game/builders/titleScreenBuilder";
+import { WinBuilder } from "./game/builders/winBuilder";
 import { ResourceService } from "./game/common/resourceService";
 import { LevelLoaderService } from "./game/levels/levelLoaderService";
 import { TilemapService } from "./game/levels/tilemapService";
@@ -87,41 +89,79 @@ if (Environment.IS_TEST) {
 			const scheduleService = scene.getService(ScheduleService);
 			const levelLoaderService = scene.getService(LevelLoaderService);
 			const audioService = scene.getService(AudioService);
+			const cameraService = scene.getService(CameraService);
 
 			await renderService.fadeOut(true);
 
-			// await scheduleService.waitForPredicate(() => {
-			// 	return love.keyboard.isDown("p");
-			// });
+			{
+				const splash = scene.addEntity(new SplashScreenBuilder(), undefined);
 
-			// {
-			// 	const splash = scene.addEntity(new SplashScreenBuilder(), undefined);
+				await scheduleService.waitForSeconds(0.5);
+				await renderService.fadeIn();
+				await scheduleService.waitForSeconds(2);
+				await renderService.fadeOut();
+				splash.destroy();
+			}
 
-			// 	await scheduleService.waitForSeconds(0.5);
-			// 	await renderService.fadeIn();
-			// 	await scheduleService.waitForSeconds(2);
-			// 	await renderService.fadeOut();
-			// 	splash.destroy();
-			// }
-
-			// {
-			// 	const title = scene.addEntity(new TitleScreenBuilder(), undefined);
-
-			// 	await scheduleService.waitForSeconds(0.5);
-			// 	await renderService.fadeIn();
-			// 	await scheduleService.waitForPredicate(() => {
-			// 		return love.keyboard.isDown("return");
-			// 	});
-
-			// 	audioService.playSound("play");
-			// 	await renderService.fadeOut();
-			// 	title.destroy();
-			// }
+			const introSource = audioService.playTrack("Mysterious");
 
 			{
+				const title = scene.addEntity(new TitleScreenBuilder(), undefined);
+
+				await scheduleService.waitForSeconds(0.5);
+				await renderService.fadeIn();
+				await scheduleService.waitForPredicate(() => {
+					return love.keyboard.isDown("return");
+				});
+
+				audioService.playSound("play");
+				await renderService.fadeOut();
+				title.destroy();
+			}
+
+			{
+
+				await scheduleService.waitForSeconds(0.5);
+				await renderService.fadeIn();
+
+				const plot = scene.addEntity(new PlotBuilder(), undefined);
+
+				await scheduleService.waitForPredicate(() => {
+					return love.keyboard.isDown("return");
+				});
+
+				introSource.stop();
+				await renderService.fadeOut();
+				plot.destroy();
+			}
+
+			{
+				const source = audioService.playTrack("FunkDungeon");
 				await scheduleService.waitForSeconds(0.5);
 				await renderService.fadeIn();
 				levelLoaderService.load("Level_0");
+
+				await scheduleService.waitForPredicate(() => {
+					return levelLoaderService.finished;
+				});
+
+				source.stop();
+				await renderService.fadeOut();
+				await scheduleService.waitForSeconds(0.5);
+			}
+
+			{
+				audioService.playTrack("Credits");
+				cameraService.reset();
+				await scheduleService.waitForSeconds(0.5);
+				await renderService.fadeIn();
+
+				scene.addEntity(new WinBuilder(), undefined);
+
+				await scheduleService.waitForSeconds(10);
+				await renderService.fadeOut();
+				await scheduleService.waitForSeconds(1);
+				love.event.quit();
 			}
 		})();
 	};

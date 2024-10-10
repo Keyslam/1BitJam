@@ -1,12 +1,15 @@
 import { Service } from "../../core/service";
+import { PlayerControls } from "../behaviours/playerControls";
 import { LayerBuilder } from "../builders/layerBuilder";
 import { PlayerBuilder } from "../builders/playerBuilder";
 import { ShroomBuilder } from "../builders/shroomBuilder";
 import { SpikebugBuilder } from "../builders/spikebugBuilder";
 import { CameraService } from "../rendering/cameraService";
+import { ScheduleService } from "../scheduling/scheduleService";
 import { TilemapService } from "./tilemapService";
 
 export class LevelLoaderService extends Service {
+	private scheduleService!: ScheduleService;
 	private cameraService!: CameraService;
 	private tilemapService!: TilemapService;
 
@@ -14,6 +17,12 @@ export class LevelLoaderService extends Service {
 	private shroomBuilder = new ShroomBuilder();
 	private spikebugBuilder = new SpikebugBuilder();
 	private layerBuilder = new LayerBuilder();
+
+	private goingNext = false;
+	private index = 0;
+
+	public finished = false;
+	private player!: PlayerControls;
 
 	constructor() {
 		super();
@@ -29,6 +38,44 @@ export class LevelLoaderService extends Service {
 	public override onFinalize(): void {
 		this.cameraService = this.inject(CameraService);
 		this.tilemapService = this.inject(TilemapService);
+		this.scheduleService = this.inject(ScheduleService);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	override postUpdate(dt: number): void {
+		if (this.player === undefined) {
+			return;
+		}
+
+		if (this.player.goNext) {
+			this.next();
+		}
+	}
+
+	public async next() {
+		if (this.goingNext) {
+			return;
+		}
+
+		if (this.finished) {
+			return;
+		}
+
+		this.tilemapService.reset();
+		this.scene.destroyAll();
+		await this.scheduleService.waitForSeconds(0.1);
+
+		this.goingNext = true;
+		this.index++;
+
+		try {
+			
+			this.load(`Level_${this.index}`);
+		} catch {
+			this.finished = true;
+		}
+
+		this.goingNext = false;
 	}
 
 	public load(name: string): void {
@@ -47,6 +94,7 @@ export class LevelLoaderService extends Service {
 			});
 
 			this.cameraService.startFollowing(player, true);
+			this.player = player.getComponent(PlayerControls);
 		}
 
 		if (entity.id === "Shroom") {
