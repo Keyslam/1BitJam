@@ -50,6 +50,34 @@ export class LevelLoaderService extends Service {
 		if (this.player.goNext) {
 			this.next();
 		}
+
+		if (love.keyboard.isDown("r")) {
+			this.reload();
+		}
+	}
+
+	public async reload() {
+		if (this.goingNext) {
+			return;
+		}
+
+		this.goingNext = true;
+
+		if (this.finished) {
+			return;
+		}
+
+		this.tilemapService.reset();
+		this.scene.destroyAll();
+		await this.scheduleService.waitForSeconds(0.3);
+
+		try {
+			this.load(`Level_${this.index}`);
+		} catch {
+			this.finished = true;
+		}
+
+		this.goingNext = false;
 	}
 
 	public async next() {
@@ -91,6 +119,7 @@ export class LevelLoaderService extends Service {
 			const player = this.scene.addEntity(this.playerBuilder, {
 				x: entity.x,
 				y: entity.y,
+				hop: this.index !== 0,
 			});
 
 			this.cameraService.startFollowing(player, true);
@@ -160,7 +189,6 @@ export class LevelLoaderService extends Service {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	private onLevelCreated(level: LdtkLevel): void {
 		this.cameraService.setBounds(level.width, level.height);
 	}

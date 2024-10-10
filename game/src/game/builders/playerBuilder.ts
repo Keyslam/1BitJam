@@ -12,6 +12,7 @@ import { SpriteRenderer } from "../rendering/spriteRenderer";
 export interface PlayerProps {
 	x: number;
 	y: number;
+	hop: boolean;
 }
 
 export class PlayerBuilder extends Builder<PlayerProps> {
@@ -22,7 +23,7 @@ export class PlayerBuilder extends Builder<PlayerProps> {
 			new Position(props.x, props.y),
 			new SpriteRenderer(),
 			new AnimatedSprite(this.animations, "Idle"),
-			new Velocity(),
+			new Velocity(0, 0),
 			new Mass(),
 			new Body({
 				top: -3,
@@ -30,7 +31,7 @@ export class PlayerBuilder extends Builder<PlayerProps> {
 				left: -8,
 				right: 7,
 			}),
-			new PlayerControls(),
+			new PlayerControls(props.hop),
 		);
 	}
 }

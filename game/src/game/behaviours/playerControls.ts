@@ -44,6 +44,13 @@ export class PlayerControls extends Component {
 
 	public goNext = false;
 
+	private hop = false;
+
+	constructor(hop: boolean) {
+		super();
+		this.hop = hop;
+	}
+
 	public override onFinalize(): void {
 		this.renderService = this.injectService(RenderService);
 		this.tilemapService = this.injectService(TilemapService);
@@ -58,6 +65,12 @@ export class PlayerControls extends Component {
 		this.body = this.inject(Body);
 
 		this.body.onCollision.subscribe((payload) => this.onCollision(payload));
+
+		if (this.hop) {
+			this.scheduleService.waitForSeconds(0.0).then(() => {
+				this.velocity.y = -4;
+			});
+		}
 	}
 
 	public override onFixedUpdate(): void {

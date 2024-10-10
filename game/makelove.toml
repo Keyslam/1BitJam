@@ -1,6 +1,6 @@
-name = "1-Bit-Jam"
+name = "Tower-Babe"
 love_version = "11.5"
-default_targets = ["win32", "win64"]
+default_targets = ["win32", "win64", "macos"]
 build_directory = "../dist"
 love_files = [
     "+*",
@@ -9,8 +9,8 @@ love_files = [
 icon_file = "assets/icon.png"
 
 [windows.exe_metadata]
-FileDescription = "1 Bit Jam"
+FileDescription = "Tower Babe"
 FileVersion = "1.0"
 CompanyName = "Keyslam"
 LegalCopyright = "Copyright © 2024 Justin van der Leij"
-ProductName = "1 Bit Jam"
+ProductName = "Tower Babe"

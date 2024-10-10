@@ -73,5 +73,6 @@ export function createOrUpdateWindowWithSettings(windowSettings: WindowSettings)
 		usedpiscale: undefined,
 	});
 
-	love.window.setTitle("1 Bit Jam");
+	love.window.setTitle("Tower Babe");
+	love.window.setIcon(love.image.newImageData("assets/icon.png"));
 }
