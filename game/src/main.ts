@@ -4,6 +4,7 @@ import { Environment } from "./environment";
 import { AudioService } from "./game/audio/audioService";
 import { PlotBuilder } from "./game/builders/plotBuilder";
 import { SplashScreenBuilder } from "./game/builders/splashScreenBuilder";
+import { StatScreenBuilder } from "./game/builders/statScreen";
 import { TitleScreenBuilder } from "./game/builders/titleScreenBuilder";
 import { WinBuilder } from "./game/builders/winBuilder";
 import { ResourceService } from "./game/common/resourceService";
@@ -12,6 +13,7 @@ import { TilemapService } from "./game/levels/tilemapService";
 import { CameraService } from "./game/rendering/cameraService";
 import { RenderService } from "./game/rendering/renderService";
 import { ScheduleService } from "./game/scheduling/scheduleService";
+import { StatService } from "./game/stats/statService";
 import { report } from "./libraries/lester/lester";
 import { start, useLove } from "./libraries/localLuaDebuggerPatcher/localLuaDebuggerPatcher";
 import { createOrUpdateWindowWithSettings, createSaneDefaultWindowSettings, getCurrentWindowSettings, loadWindowSettings, saveWindowSettings } from "./window";
@@ -80,6 +82,7 @@ if (Environment.IS_TEST) {
 			new TilemapService(),
 			new ScheduleService(),
 			new AudioService(),
+			new StatService(),
 		);
 
 		sceneOrchestrator.loadScene(scene);
@@ -90,6 +93,7 @@ if (Environment.IS_TEST) {
 			const levelLoaderService = scene.getService(LevelLoaderService);
 			const audioService = scene.getService(AudioService);
 			const cameraService = scene.getService(CameraService);
+			const statService = scene.getService(StatService);
 
 			await renderService.fadeOut(true);
 
@@ -139,28 +143,49 @@ if (Environment.IS_TEST) {
 				const source = audioService.playTrack("FunkDungeon");
 				await scheduleService.waitForSeconds(0.5);
 				await renderService.fadeIn();
+				statService.startTime = love.timer.getTime();
 				levelLoaderService.load("Level_0");
+
+				await scheduleService.waitForPredicate(() => {
+					return levelLoaderService.index === 5;
+				});
+				source.stop();
+
+				const newSource = audioService.playTrack("WaterShrine");
 
 				await scheduleService.waitForPredicate(() => {
 					return levelLoaderService.finished;
 				});
 
-				source.stop();
+				newSource.stop();
 				await renderService.fadeOut();
 				await scheduleService.waitForSeconds(0.5);
 			}
 
+			audioService.playTrack("Credits");
 			{
-				audioService.playTrack("Credits");
 				cameraService.reset();
 				await scheduleService.waitForSeconds(0.5);
 				await renderService.fadeIn();
 
-				scene.addEntity(new WinBuilder(), undefined);
+				const win = scene.addEntity(new WinBuilder(), undefined);
+
+				await scheduleService.waitForSeconds(7);
+				await renderService.fadeOut();
+				win.destroy();
+			}
+
+			{
+				await scheduleService.waitForSeconds(0.5);
+				await renderService.fadeIn();
+
+				scene.addEntity(new StatScreenBuilder(), undefined);
 
 				await scheduleService.waitForSeconds(10);
-				await renderService.fadeOut();
-				await scheduleService.waitForSeconds(1);
+				await scheduleService.waitForPredicate(() => {
+					return love.keyboard.isDown("return");
+				});
+
 				love.event.quit();
 			}
 		})();

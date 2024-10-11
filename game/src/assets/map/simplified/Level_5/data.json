@@ -9,7 +9,7 @@
 	"neighbourLevels": [
 		{
 			"levelIid": "88066940-73f0-11ef-b77e-09546bb92e53",
-			"dir": "s"
+			"dir": "e"
 		},
 		{
 			"levelIid": "b00540a0-73f0-11ef-b77e-776bb9c2f68d",
@@ -26,12 +26,27 @@
 				"id": "Player",
 				"iid": "82357ff0-73f0-11ef-b77e-27d07c1ed57a",
 				"layer": "Entities",
-				"x": 160,
+				"x": 176,
 				"y": 304,
 				"width": 16,
 				"height": 16,
 				"color": 12470831,
 				"customFields" : {}
+			}
+		],
+		"Diamond": [
+			{
+				"id": "Diamond",
+				"iid": "998a8ce0-73f0-11ef-8b66-eb41758b79cb",
+				"layer": "Entities",
+				"x": 432,
+				"y": 128,
+				"width": 16,
+				"height": 16,
+				"color": 15714484,
+				"customFields": {
+					"Id": 6
+				}
 			}
 		]
 	}

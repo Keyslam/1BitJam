@@ -33,6 +33,21 @@
 				"color": 12470831,
 				"customFields" : {}
 			}
+		],
+		"Diamond": [
+			{
+				"id": "Diamond",
+				"iid": "e1110e50-73f0-11ef-8b66-b53fd4a7de3c",
+				"layer": "Entities",
+				"x": 352,
+				"y": 144,
+				"width": 16,
+				"height": 16,
+				"color": 15714484,
+				"customFields": {
+					"Id": 3
+				}
+			}
 		]
 	}
 }

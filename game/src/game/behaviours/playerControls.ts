@@ -12,9 +12,12 @@ import { Colors } from "../rendering/color";
 import { RenderService } from "../rendering/renderService";
 import { SpriteRenderer } from "../rendering/spriteRenderer";
 import { ScheduleService } from "../scheduling/scheduleService";
+import { StatService } from "../stats/statService";
 
 export class PlayerControls extends Component {
-	private static friction = 0.5;
+	private static normalFriction = 0.5;
+	private static iceFriction = 0.15;
+	private static chargeFriction = 0.4;
 	private static acceleration = 1;
 	private static maxHorizontalSpeed = 2;
 	private static maxChargeTime = 0.6 * 60;
@@ -26,6 +29,7 @@ export class PlayerControls extends Component {
 	private tilemapService!: TilemapService;
 	private scheduleService!: ScheduleService;
 	private audioService!: AudioService;
+	private statService!: StatService;
 
 	private position!: Position;
 	private velocity!: Velocity;
@@ -56,6 +60,7 @@ export class PlayerControls extends Component {
 		this.tilemapService = this.injectService(TilemapService);
 		this.scheduleService = this.injectService(ScheduleService);
 		this.audioService = this.injectService(AudioService);
+		this.statService = this.injectService(StatService);
 
 		this.position = this.inject(Position);
 		this.velocity = this.inject(Velocity);
@@ -97,6 +102,8 @@ export class PlayerControls extends Component {
 			}
 		} else {
 			
+			const isOnIce = this.tilemapService.isOnIce(feetSensor, this.position.x, this.position.y);
+
 			if (isOnGround) {
 				this.didBounce = false;
 			}
@@ -115,12 +122,34 @@ export class PlayerControls extends Component {
 				}
 
 				if (horizontalAxis === 0 && isOnGround) {
+					let friction = isOnIce ? PlayerControls.iceFriction : PlayerControls.normalFriction;
+					if (this.isCharging) {
+						friction += PlayerControls.chargeFriction;
+					}
+
 					if (this.velocity.x > 0) {
-						this.velocity.x = Math.max(0, this.velocity.x - PlayerControls.friction);
+						this.velocity.x = Math.max(0, this.velocity.x - friction);
 					}
 
 					if (this.velocity.x < 0) {
-						this.velocity.x = Math.min(0, this.velocity.x + PlayerControls.friction);
+						this.velocity.x = Math.min(0, this.velocity.x + friction);
+					}
+				}
+			}
+
+			if (this.isCharging && !this.isSplat && !this.isGettingUp) {
+				if (isOnGround) {
+					let friction = isOnIce ? PlayerControls.iceFriction : PlayerControls.normalFriction;
+					if (this.isCharging) {
+						friction += PlayerControls.chargeFriction;
+					}
+
+					if (this.velocity.x > 0) {
+						this.velocity.x = Math.max(0, this.velocity.x - friction);
+					}
+
+					if (this.velocity.x < 0) {
+						this.velocity.x = Math.min(0, this.velocity.x + friction);
 					}
 				}
 			}
@@ -159,7 +188,7 @@ export class PlayerControls extends Component {
 						this.chargeTime = 0;
 						this.isCharging = true;
 
-						this.velocity.x = 0;
+						// this.velocity.x = 0;
 					}
 				}
 			}
@@ -227,6 +256,7 @@ export class PlayerControls extends Component {
 		if (payload.y > 0) {
 			if (this.velocity.y >= 10) {
 				this.audioService.playSound("splat");
+				this.statService.facePlants++;
 				this.velocity.x = 0;
 				this.velocity.y = 0;
 				this.isSplat = true;

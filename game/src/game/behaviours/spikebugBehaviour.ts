@@ -1,5 +1,6 @@
 import { Component } from "../../core/component";
 import { Entity } from "../../core/entity";
+import { AudioService } from "../audio/audioService";
 import { Position } from "../common/position";
 import { Body } from "../physics/body";
 import { Velocity } from "../physics/velocity";
@@ -7,11 +8,13 @@ import { PlayerControls } from "./playerControls";
 
 export class SpikebugBehaviour extends Component {
 	private player!: Entity;
+	private audioService!: AudioService;
 
 	private position!: Position;
 	private body!: Body;
 
 	public override onFinalize(): void {
+		this.audioService = this.injectService(AudioService);
 		this.position = this.inject(Position);
 		this.body = this.inject(Body);
 	}
@@ -43,6 +46,7 @@ export class SpikebugBehaviour extends Component {
 			} else {
 				playerVelocity.x = 3;
 			}
+			this.audioService.playSound("bump");
 		}
 	}
 }

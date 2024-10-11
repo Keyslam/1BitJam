@@ -1,5 +1,6 @@
 import { Service } from "../../core/service";
 import { PlayerControls } from "../behaviours/playerControls";
+import { DiamondBuilder } from "../builders/diamondBuilder";
 import { LayerBuilder } from "../builders/layerBuilder";
 import { PlayerBuilder } from "../builders/playerBuilder";
 import { ShroomBuilder } from "../builders/shroomBuilder";
@@ -17,9 +18,10 @@ export class LevelLoaderService extends Service {
 	private shroomBuilder = new ShroomBuilder();
 	private spikebugBuilder = new SpikebugBuilder();
 	private layerBuilder = new LayerBuilder();
+	private diamondBuilder = new DiamondBuilder();
 
 	private goingNext = false;
-	private index = 0;
+	public index = 0;
 
 	public finished = false;
 	private player!: PlayerControls;
@@ -139,6 +141,14 @@ export class LevelLoaderService extends Service {
 				y: entity.y,
 			});
 		}
+
+		if (entity.id === "Diamond") {
+			this.scene.addEntity(this.diamondBuilder, {
+				x: entity.x,
+				y: entity.y,
+				id: entity.props["Id"],
+			});
+		}
 	}
 
 	private onLayer(layer: LdtkLayer): void {
@@ -174,6 +184,12 @@ export class LevelLoaderService extends Service {
 					"slope-left",
 				);
 			} else {
+				let kind: "solid" | "open" | "slope-left" | "slope-right" | "ice" = "solid";
+
+				if (tile.t === 80 || tile.t === 81 || tile.t === 82 || tile.t === 83 || tile.t === 84 || tile.t === 85 || tile.t === 104 || tile.t === 105) {
+					kind = "ice";
+				}
+
 				this.tilemapService.setTile( //
 					Math.ceil(tile.px[0] / TilemapService.tileSize),
 					Math.ceil(tile.px[1] / TilemapService.tileSize),
@@ -183,7 +199,7 @@ export class LevelLoaderService extends Service {
 						right: 16,
 						bottom: 16,
 					},
-					"solid"
+					kind
 				);
 			}
 		}

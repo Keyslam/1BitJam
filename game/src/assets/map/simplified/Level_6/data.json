@@ -12,7 +12,7 @@
 			"dir": "s"
 		},
 		{
-			"levelIid": "3165fae0-73f0-11ef-b77e-094e55409cb2",
+			"levelIid": "44a43520-73f0-11ef-8b66-13aded0ae456",
 			"dir": "n"
 		}
 	],
@@ -56,6 +56,21 @@
 				"height": 16,
 				"color": 12470831,
 				"customFields" : {}
+			}
+		],
+		"Diamond": [
+			{
+				"id": "Diamond",
+				"iid": "bd63e100-73f0-11ef-8b66-eb36fd0b040f",
+				"layer": "Entities",
+				"x": 384,
+				"y": 32,
+				"width": 16,
+				"height": 16,
+				"color": 15714484,
+				"customFields": {
+					"Id": 7
+				}
 			}
 		]
 	}

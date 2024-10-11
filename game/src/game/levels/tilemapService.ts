@@ -3,7 +3,7 @@ import { BoundingBox } from "../physics/boundingBox";
 
 export interface Tile {
 	boundingBox: BoundingBox | ((other: BoundingBox) => boolean);
-	state: "solid" | "open" | "slope-right" | "slope-left";
+	state: "solid" | "open" | "slope-right" | "slope-left" | "ice";
 }
 
 export class TilemapService extends Service {
@@ -18,7 +18,7 @@ export class TilemapService extends Service {
 		this.height = height;
 	}
 
-	public setTile(x: number, y: number, boundingBox: BoundingBox | ((other: BoundingBox) => boolean), kind: "solid" | "open" | "slope-right" | "slope-left"): void {
+	public setTile(x: number, y: number, boundingBox: BoundingBox | ((other: BoundingBox) => boolean), kind: "solid" | "open" | "slope-right" | "slope-left" | "ice"): void {
 		const key = this.coordToKey(x, y);
 		this.tiles[key] = {
 			boundingBox: boundingBox,
@@ -127,6 +127,58 @@ export class TilemapService extends Service {
 						if (tile.state === "slope-left" || tile.state === "slope-right") {
 							return tile.state;
 						}
+					}
+				}
+				
+			}
+		}
+
+		return false;
+	}
+
+	public isOnIce(boundingBox: BoundingBox, offsetX: number, offsetY: number): boolean {
+		const newTop = offsetY + boundingBox.top;
+		const newLeft = offsetX + boundingBox.left;
+		const newBottom = offsetY + boundingBox.bottom - 1;
+		const newRight = offsetX + boundingBox.right - 1;
+
+		const startTileX = Math.floor(newLeft / TilemapService.tileSize);
+		const endTileX = Math.floor(newRight / TilemapService.tileSize);
+		const startTileY = Math.floor(newTop / TilemapService.tileSize);
+		const endTileY = Math.floor(newBottom / TilemapService.tileSize);
+
+		for (let tileY = startTileY; tileY <= endTileY; tileY++) {
+			for (let tileX = startTileX; tileX <= endTileX; tileX++) {
+				const key = this.coordToKey(tileX, tileY);
+				const tile = this.tiles[key];
+
+				if (tile === undefined) {
+					continue;
+				}
+
+				if (tile.state === "open") {
+					continue;
+				}
+
+				if (typeof tile.boundingBox === "function") {
+					if (
+						tile.boundingBox({
+							top: newTop - tileY * TilemapService.tileSize,
+							left: newLeft - tileX * TilemapService.tileSize,
+							bottom: newBottom - tileY * TilemapService.tileSize,
+							right: newRight - tileX * TilemapService.tileSize,
+						})
+					) {
+						return tile.state === "ice";
+					}
+				} else {
+					const tileTop = tileY * TilemapService.tileSize + tile.boundingBox.top - 1;
+					const tileLeft = tileX * TilemapService.tileSize + tile.boundingBox.left - 1;
+					const tileBottom = tileTop + tile.boundingBox.bottom + 1;
+					const tileRight = tileLeft + tile.boundingBox.right + 1;
+
+					if (newLeft < tileRight && newRight > tileLeft && newTop < tileBottom && newBottom > tileTop) {
+						return tile.state === "ice";
 					}
 				}
 				

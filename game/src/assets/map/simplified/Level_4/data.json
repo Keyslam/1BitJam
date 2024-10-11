@@ -1,19 +1,19 @@
 {
 	"identifier": "Level_4",
 	"uniqueIdentifer": "88066940-73f0-11ef-b77e-09546bb92e53",
-	"x": 0,
-	"y": -1200,
+	"x": 512,
+	"y": -1248,
 	"width": 512,
-	"height": 288,
+	"height": 336,
 	"bgColor": "#696A79",
 	"neighbourLevels": [
 		{
 			"levelIid": "d815f9b0-73f0-11ef-b77e-a7ad4c115375",
-			"dir": "s"
+			"dir": "sw"
 		},
 		{
 			"levelIid": "0f7631d0-73f0-11ef-b77e-d5b6dee9fcd1",
-			"dir": "n"
+			"dir": "w"
 		}
 	],
 	"customFields" : {},
@@ -27,7 +27,7 @@
 				"iid": "e443ff60-73f0-11ef-b77e-d7b902407671",
 				"layer": "Entities",
 				"x": 160,
-				"y": 256,
+				"y": 304,
 				"width": 16,
 				"height": 16,
 				"color": 12470831,
@@ -40,11 +40,26 @@
 				"iid": "e5818870-73f0-11ef-b77e-cbb4a1cee5ce",
 				"layer": "Entities",
 				"x": 240,
-				"y": 112,
+				"y": 160,
 				"width": 16,
 				"height": 16,
 				"color": 10626611,
 				"customFields" : {}
+			}
+		],
+		"Diamond": [
+			{
+				"id": "Diamond",
+				"iid": "58de9c90-73f0-11ef-8b66-b50884116b34",
+				"layer": "Entities",
+				"x": 320,
+				"y": 80,
+				"width": 16,
+				"height": 16,
+				"color": 15714484,
+				"customFields": {
+					"Id": 5
+				}
 			}
 		]
 	}

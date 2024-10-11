@@ -1,14 +1,18 @@
 {
 	"identifier": "Level_8",
-	"uniqueIdentifer": "b26645a0-73f0-11ef-b77e-ffd5fa4678d0",
-	"x": -128,
-	"y": -2400,
-	"width": 768,
-	"height": 256,
+	"uniqueIdentifer": "4e2ff1a0-73f0-11ef-8b66-d1f95f4563a2",
+	"x": 0,
+	"y": -2576,
+	"width": 512,
+	"height": 320,
 	"bgColor": "#696A79",
 	"neighbourLevels": [
 		{
 			"levelIid": "3165fae0-73f0-11ef-b77e-094e55409cb2",
+			"dir": "n"
+		},
+		{
+			"levelIid": "44a43520-73f0-11ef-8b66-13aded0ae456",
 			"dir": "s"
 		}
 	],
@@ -20,14 +24,64 @@
 		"Player": [
 			{
 				"id": "Player",
-				"iid": "234d2a40-73f0-11ef-b77e-c77e775bc4ad",
+				"iid": "63f44d10-73f0-11ef-8b66-3966548eedd3",
 				"layer": "Entities",
-				"x": 384,
-				"y": 208,
+				"x": 368,
+				"y": 288,
 				"width": 16,
 				"height": 16,
 				"color": 12470831,
 				"customFields" : {}
+			}
+		],
+		"Shroom": [
+			{
+				"id": "Shroom",
+				"iid": "72e5fc10-73f0-11ef-8b66-3fb609ac16bb",
+				"layer": "Entities",
+				"x": 304,
+				"y": 224,
+				"width": 16,
+				"height": 16,
+				"color": 10626611,
+				"customFields" : {}
+			},
+			{
+				"id": "Shroom",
+				"iid": "9b97ec40-73f0-11ef-8b66-c75475c50711",
+				"layer": "Entities",
+				"x": 240,
+				"y": 256,
+				"width": 16,
+				"height": 16,
+				"color": 10626611,
+				"customFields" : {}
+			},
+			{
+				"id": "Shroom",
+				"iid": "c9fdab60-73f0-11ef-8b66-379a13f635d1",
+				"layer": "Entities",
+				"x": 192,
+				"y": 128,
+				"width": 16,
+				"height": 16,
+				"color": 10626611,
+				"customFields" : {}
+			}
+		],
+		"Diamond": [
+			{
+				"id": "Diamond",
+				"iid": "cd117b10-73f0-11ef-8b66-c9c4b21d616f",
+				"layer": "Entities",
+				"x": 272,
+				"y": 128,
+				"width": 16,
+				"height": 16,
+				"color": 15714484,
+				"customFields": {
+					"Id": 9
+				}
 			}
 		]
 	}

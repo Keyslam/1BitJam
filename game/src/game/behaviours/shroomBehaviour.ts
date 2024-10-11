@@ -60,11 +60,13 @@ export class ShroomBehaviour extends Component {
 				playerVelocity.y = -3;
 				if (cx > px) {
 					playerVelocity.x = -3;
-					
+
 				} else {
 					playerVelocity.x = 3;
 				}
-				
+
+				this.audioService.playSound("bump");
+
 			} else {
 				this.patrol.active = false;
 				this.animatedSprite.play("Squash");
@@ -79,6 +81,6 @@ export class ShroomBehaviour extends Component {
 				this.destroy();
 			}
 		}
-		
+
 	}
 }

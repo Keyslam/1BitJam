@@ -1,7 +1,7 @@
 import { Config } from "love";
 
 love.conf = (config: Config) => {
-	config.identity = "1BitJam";
+	config.identity = "TowerBabe";
 	config.version = "11.5";
 
 	config.console = true;
